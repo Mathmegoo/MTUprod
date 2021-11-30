@@ -47,7 +47,7 @@
     <h2>{{ item.title }}</h2>
     <p>{{ item.content }}</p>
     <p>Дата создания: {{ item.date_created }}</p>
-   <p> Комментарии:</p>
+    <p> Комментарии:</p>
     {% for comment in comments %}
         {% if comment.article_id == item.id %}
         <p>{{ comment }}</p>

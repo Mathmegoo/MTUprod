@@ -12,7 +12,7 @@ import hmac
 import hashlib
 import base64
 import json
-from models.models import Articles, Site_users, Comments
+from models import models 
 from models import crud
 
 
@@ -79,7 +79,11 @@ users = {
     }
 }
 
-
+@app.get("/items", response_class=HTMLResponse)
+def render_my_temp(request: Request,  db: Session = Depends(get_db)):
+    vie_posts = db.query(models.Articles).all()
+    vie_comments = db.query(models.Comments).all()
+    return templates.TemplateResponse('home.html', {"request" : request, "posts" : vie_posts, "comments" :vie_comments})
 
 
 

@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, query
 from sqlalchemy.sql.operators import exists
 from server import verify_password, get_db, hash_password
 from . import models 
@@ -32,3 +32,4 @@ def get_articles ( db:Session, skip: int = 0, limit: int = 500,):
 def get_comments ( db:Session, skip: int = 0, limit: int = 5000,):
     exsist_comments = db.query(models.Comments).offset(skip).limit(limit).all()
     return exsist_comments
+
