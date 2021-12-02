@@ -79,16 +79,50 @@ users = {
     }
 }
 
-@app.get("/items", response_class=HTMLResponse)
-def render_my_temp(request: Request,  db: Session = Depends(get_db)):
-    vie_posts = db.query(models.Articles).all()
-    vie_comments = db.query(models.Comments).all()
-    return templates.TemplateResponse('home.html', {"request" : request, "posts" : vie_posts, "comments" :vie_comments})
+
+@app.get('/admin', response_class=HTMLResponse)#Доделать вдминский роут для публткации статей!
+def admin_page (request : Request, username : Optional[str] = Cookie(default=None),  db : Session = Depends(get_db), ):
+    valid_user = get_username_from_signed_string(username)
+    if valid_user == "nikita@username.com":
+        
+        vie_posts = db.query(models.Articles).all()
+        vie_comments = db.query(models.Comments).all()
+        responce = templates.TemplateResponse('admin.html', {"request" : request, "posts" : vie_posts, "comments" :vie_comments})
+        return responce
+    else:
+        return Response(
+            json.dumps({
+                'success' : True,
+                'message' : f"Hello, you not admin("
+            }), 
+            media_type='application/json'
+            )
+
+
+
+@app.post('/admin', response_class=HTMLResponse)#Доделать вдминский роут для публткации статей!
+def admin_page (request : Request, username : Optional[str] = Cookie(default=None), title: str = Form(...), content : str = Form(...), db : Session = Depends(get_db), ):
+    valid_username = get_username_from_signed_string(username)
+    if valid_username == "nikita@username.com":
+        crud.create_article(title, content, db)
+        vie_posts = db.query(models.Articles).all()
+        vie_comments = db.query(models.Comments).all()
+        responce = templates.TemplateResponse('admin.html', {"request" : request, "posts" : vie_posts, "comments" :vie_comments})
+        return responce
+    else:
+        return Response(
+            json.dumps({
+                'success' : True,
+                'message' : f"Hello, you not admin("
+            }), 
+            media_type='application/json'
+            )
+
 
 
 
 @app.get('/', response_class=HTMLResponse)
-def index_page(username : Optional[str] = Cookie(default=None), db : Session = Depends(get_db),request = Request):
+def index_page(request : Request, username : Optional[str] = Cookie(default=None), db : Session = Depends(get_db)):
     with open('templates/login.html', 'r') as f:
         login_page = f.read()
     
@@ -111,21 +145,33 @@ def index_page(username : Optional[str] = Cookie(default=None), db : Session = D
             return responce
     
     
-    return Response(json.dumps({
-                'success' : True,
-                'message' : f"Hello, {user.nickname}!" 
-            }), 
-            media_type='application/json'
-            )
+    vie_posts = db.query(models.Articles).all()
+    vie_comments = db.query(models.Comments).all()
+    responce = templates.TemplateResponse('home.html', {"request" : request, "posts" : vie_posts, "comments" :vie_comments})
+    return responce
      
 
 
+@app.post('/', response_class=HTMLResponse, )
+def post_articles_and_comm(request : Request, username : Optional[str] = Cookie(default=None) ,article_id : str = Form(...), content : str = Form(...), db : Session = Depends(get_db), ):
+    valid_username = get_username_from_signed_string(username)
+    crud.create_comment(valid_username,article_id, content, db)
+    vie_posts = db.query(models.Articles).all()
+    vie_comments = db.query(models.Comments).all()
+    responce = templates.TemplateResponse('home.html', {"request" : request, "posts" : vie_posts, "comments" :vie_comments})
+    return responce
 
 
-@app.post('/login', response_class=HTMLResponse,  )
+
+
+
+
+
+@app.post('/login',   )
 def process_login_page(username : str = Form(...), password : str = Form(...), db = Depends(get_db)):
     
     verified_user = crud.get_user_by_login(username, db)
+    print (verified_user)
     if not verified_user or not verify_password(password, verified_user.passwordu):
 
         

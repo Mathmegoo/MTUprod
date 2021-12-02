@@ -33,7 +33,16 @@
 
 <body>
     <h1>POSTS :</h1>
-
+    <form action='/admin' method="POST">
+        
+        Title of article: <br><br>
+        <input type="text" name="title" value="">
+        <br><br>
+        Text: <br><br>
+        <input type="text" name="content" value="">
+        <br><br>
+        <input type="submit" value="POST">
+    </form>
 {% for item in posts %}
     <h2>{{ item.title }}</h2>
     <p>{{ item.content }}</p>

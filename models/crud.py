@@ -29,7 +29,24 @@ def get_articles ( db:Session, skip: int = 0, limit: int = 500,):
     exsist_articles = db.query(models.Articles).offset(skip).limit(limit).all()
     return exsist_articles
 
+def create_article( title, content, db: Session ):
+    db_article = models.Articles(title=title, content= content, )
+    print(db)
+    db.add(db_article)
+    db.commit()
+    db.refresh(db_article)
+    return db_article
+
 def get_comments ( db:Session, skip: int = 0, limit: int = 5000,):
     exsist_comments = db.query(models.Comments).offset(skip).limit(limit).all()
     return exsist_comments
 
+def create_comment( valid_username, article_id, content, db: Session ):
+    autor = get_user_by_login(valid_username, db)
+    autor_id = autor.id
+    db_comment = models.Comments(autor_id=autor_id,article_id = article_id, content= content, )
+    print(db)
+    db.add(db_comment)
+    db.commit()
+    db.refresh(db_comment)
+    return db_comment

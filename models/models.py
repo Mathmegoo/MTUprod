@@ -44,7 +44,7 @@ class Comments (Base):
             nullable=False,
             index=True
     )
-    article = relationship('Articles', foreign_keys=[article_id,])
+    
     content = Column (String(400), nullable=False)
     is_visible = Column (Boolean, default=True, nullable=False)
     def __str__(self):
