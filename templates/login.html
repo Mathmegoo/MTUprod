@@ -33,14 +33,12 @@ body {
     flex: 1;
 }
 </style>
-
+<!-- аякс-запрос при отправлении формы -->
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function(){
         let btn = document.querySelector('input[type=submit]');
         btn.addEventListener('click', async function(event){
             event.preventDefault();
-            // let username = document.querySelector('input[name=username]').value;
-            // let password = document.querySelector('input[name=password]').value;
             let responce = await fetch('/login', {
                 method: 'POST',
                 body: new FormData(document.querySelector('form'))

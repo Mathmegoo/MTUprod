@@ -32,36 +32,40 @@
 </head>
 
 <body>
-    <h1>POSTS :</h1>
-    <form action='/admin' method="POST">
+    <h1>Пользователи:</h1>
+{% for item in users %}
+    <h2>Пользователь: {{ item.nickname }}</h2>
+    <p>Почта пользователя: {{ item.login }}</p>
+    <p>Id Пользователя: {{ item.id }}</p>
+    <p>Уровень доступа пользователя: {{ item.level_of_access }}</p>
+    <p>Виден ли пользователь : {{ item.visibility }}</p>
+    <!--Пользователи с уровнем доступа (CRUD) могут видеть уровень доступа-->
+    <form action='/do_admin' method="POST">
+        <input type="hidden" name="userlogin" value="{{item.login}}">
+        <br></br>
+        <input type="submit" value="Назначить Администратором">
         
-        Title of article: <br><br>
-        <input type="text" name="title" value="">
-        <br><br>
-        Text: <br><br>
-        <input type="text" name="content" value="">
-        <br><br>
-        <input type="submit" value="POST">
     </form>
-{% for item in posts %}
-    <h2>{{ item.title }}</h2>
-    <p>{{ item.content }}</p>
-    <p>Дата создания: {{ item.date_created }}</p>
-    <p> Комментарии:</p>
-    {% for comment in comments %}
-        {% if comment.article_id == item.id %}
-        <p>{{ comment }}</p>
-        {% endif %}        
-    {% endfor %}
-    
-    <form action='/' method="POST">
+
+    <form action='/do_user' method="POST">
+        <input type="hidden" name="userlogin" value="{{item.login}}">
+        <br></br>
+        <input type="submit" value="Назначить пользователем">
         
-        <input type="hidden" name="article_id" value="{{item.id}}">
+    </form>
+
+    <form action='/delete_user' method="POST">
         
-        Your mind: <br><br>
-        <input type="text" name="content" value="">
-        <br><br>
-        <input type="submit" value="Comment">
+        <input type="hidden" name="userlogin" value="{{item.login}}">
+        <br></br>
+        <input type="submit" value="Удалить пользователя">
+    </form>
+
+    <form action='/recover_user' method="POST">
+        
+        <input type="hidden" name="userlogin" value="{{item.login}}">
+        <br></br>
+        <input type="submit" value="Восстановить пользователя">
     </form>
 {% endfor %}
 

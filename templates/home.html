@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-
+<!-- страница отдается смертным пользователям с уровнем доступа *только просмотр* -->
 <head>
 <meta charset="UTF-8">
 <title>Tilte of</title>
@@ -32,28 +32,14 @@
 </head>
 
 <body>
-    <h1>POSTS :</h1>
+    <h1>Пользователи:</h1>
 
-{% for item in posts %}
-    <h2>{{ item.title }}</h2>
-    <p>{{ item.content }}</p>
-    <p>Дата создания: {{ item.date_created }}</p>
-    <p> Комментарии:</p>
-    {% for comment in comments %}
-        {% if comment.article_id == item.id %}
-        <p>{{ comment }}</p>
-        {% endif %}        
-    {% endfor %}
+{% for item in users %}
+    <h2>Пользователь: {{ item.nickname }}</h2>
+    <p>Почта пользователя: {{ item.login }}</p>
+    <p>Id Пользователя: {{ item.id }}</p>
+    <!-- простые сметрные не видят уровень доступа пользователей -->
     
-    <form action='/' method="POST">
-        
-        <input type="hidden" name="article_id" value="{{item.id}}">
-        
-        Your mind: <br><br>
-        <input type="text" name="content" value="">
-        <br><br>
-        <input type="submit" value="Comment">
-    </form>
 {% endfor %}
 
 </body>

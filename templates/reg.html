@@ -39,8 +39,6 @@ body {
         let btn = document.querySelector('input[type=submit]');
         btn.addEventListener('click', async function(event){
             event.preventDefault();
-            // let username = document.querySelector('input[name=username]').value;
-            // let password = document.querySelector('input[name=password]').value;
             let responce = await fetch('/reg', {
                 method: 'POST',
                 body: new FormData(document.querySelector('form'))
@@ -67,6 +65,9 @@ body {
     <input type = 'text' name = 'nickname' value="nickname"/>
     <input type="password" name="password1" />
     <input type = 'password' name = 'password2' />
+    <input type="hidden" name="level_of_access" value="1"> <!--Всех новых пользователей назначает админом
+    для вашего удовства. Чтобы такое безобразие пресечь и сделать всех регистрируемых пользователей
+    простыми пользователями - измените значение этого input на "0"-->
     <input type= 'submit' value="REG" />
 </form>
     <div class="placeholder"></div>
